@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Calculadora de Pão",
+    "slug": "BreadCalculator",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFF9E6"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFF9E6"
+      },
+      "package": "com.breadcalculator.app"
+    }
+  }
+}

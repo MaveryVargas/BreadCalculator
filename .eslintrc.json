@@ -1,0 +1,18 @@
+{
+  "env": {
+    "react-native/react-native": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended", "plugin:react-native/all"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "react-native/no-unused-styles": "warn",
+    "react-native/split-platform-components": "warn"
+  }
+}
