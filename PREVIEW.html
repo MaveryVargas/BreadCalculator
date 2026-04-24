@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍞 Calculadora de Pão - Preview Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 380px;
+            height: 750px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 12px solid #222;
+            position: relative;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #222;
+            border-radius: 0 0 30px 30px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #FFF9E6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF8C42 0%, #FF7F3F 100%);
+            color: white;
+            padding: 30px 20px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px 15px 10px;
+            margin-top: -15px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stat-box {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box.gold {
+            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+        }
+
+        .stat-box.orange {
+            background: linear-gradient(135deg, #FF8C42 0%, #FF7F3F 100%);
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+
+        .search-container {
+            padding: 12px 15px;
+        }
+
+        .search-input {
+            background: white;
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #333;
+            width: 100%;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .list-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 15px 80px;
+        }
+
+        .category-section {
+            margin-top: 15px;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FF8C42;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #FFD700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .item-quantity {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-small {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .btn-small:active {
+            transform: scale(0.95);
+        }
+
+        .btn-plus, .btn-minus {
+            background: #FFD700;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #FF8C42 0%, #FF7F3F 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
+            z-index: 20;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 380px;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FF8C42;
+            margin-bottom: 15px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #FFD700;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            background: #FFF9E6;
+        }
+
+        .modal-input::placeholder {
+            color: #999;
+        }
+
+        .row-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .row-inputs input {
+            flex: 1;
+        }
+
+        .category-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .category-btn {
+            padding: 10px 8px;
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            background: #FFF9E6;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #FF8C42;
+            color: white;
+            border-color: #FF7F3F;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.98);
+        }
+
+        .modal-btn.cancel {
+            background: #FF6B6B;
+        }
+
+        .modal-btn.confirm {
+            background: #95E1D3;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .phone-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: #222;
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .info-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-left: 20px;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-panel h2 {
+            color: #FF8C42;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .info-panel ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .info-panel li {
+            padding: 8px 0;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-panel li:last-child {
+            border-bottom: none;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .info-panel {
+                margin-left: 0;
+                margin-top: 20px;
+                min-width: auto;
+            }
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <div class="phone-frame">
+                <div class="screen">
+                    <div class="header">
+                        <h1>🍞 Calculadora de Pão 🎉</h1>
+                        <p>Gerencie seus produtos com alegria!</p>
+                    </div>
+
+                    <div class="stats-container">
+                        <div class="stat-box gold">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Itens</div>
+                        </div>
+                        <div class="stat-box orange">
+                            <div class="stat-number">33.5</div>
+                            <div class="stat-label">Total Unit</div>
+                        </div>
+                    </div>
+
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="🔍 Pesquisar itens...">
+                    </div>
+
+                    <div class="list-content">
+                        <div class="category-section">
+                            <div class="category-title">🍞 PÃO</div>
+                            <div class="item-card">
+                                <div class="item-content">
+                                    <div class="item-name">Pão de Fermentação Natural</div>
+                                    <div class="item-quantity">5 kg</div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-small btn-minus">−</button>
+                                    <button class="btn-small btn-plus">+</button>
+                                    <button class="btn-small btn-delete">🗑️</button>
+                                </div>
+                            </div>
+                            <div class="item-card">
+                                <div class="item-content">
+                                    <div class="item-name">Croissants</div>
+                                    <div class="item-quantity">2 dúzia</div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-small btn-minus">−</button>
+                                    <button class="btn-small btn-plus">+</button>
+                                    <button class="btn-small btn-delete">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-section">
+                            <div class="category-title">🍪 BISCOITO</div>
+                            <div class="item-card">
+                                <div class="item-content">
+                                    <div class="item-name">Biscoito de Chocolate</div>
+                                    <div class="item-quantity">3 dúzia</div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-small btn-minus">−</button>
+                                    <button class="btn-small btn-plus">+</button>
+                                    <button class="btn-small btn-delete">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-section">
+                            <div class="category-title">🎂 BOLO</div>
+                            <div class="item-card">
+                                <div class="item-content">
+                                    <div class="item-name">Bolo de Baunilha</div>
+                                    <div class="item-quantity">2 unid</div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-small btn-minus">−</button>
+                                    <button class="btn-small btn-plus">+</button>
+                                    <button class="btn-small btn-delete">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-section">
+                            <div class="category-title">🍩 ROSQUINHA</div>
+                            <div class="item-card">
+                                <div class="item-content">
+                                    <div class="item-name">Rosquinhas Cobertas</div>
+                                    <div class="item-quantity">24 unid</div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-small btn-minus">−</button>
+                                    <button class="btn-small btn-plus">+</button>
+                                    <button class="btn-small btn-delete">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fab">➕</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h2>📊 Informações Técnicas</h2>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #333; font-size: 14px; margin-bottom: 10px;">📦 Stack Tecnológico</h3>
+                <ul>
+                    <li><strong>Framework:</strong> React Native</li>
+                    <li><strong>Plataforma:</strong> Expo</li>
+                    <li><strong>Linguagem:</strong> JavaScript ES6+</li>
+                    <li><strong>State:</strong> React Hooks</li>
+                    <li><strong>Min SDK:</strong> Android 5.0+ (21)</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #333; font-size: 14px; margin-bottom: 10px;">✨ Recursos</h3>
+                <ul>
+                    <li>✅ Adicionar/Editar/Deletar itens</li>
+                    <li>✅ 6 categorias com emoji</li>
+                    <li>✅ Busca em tempo real</li>
+                    <li>✅ Estatísticas automáticas</li>
+                    <li>✅ Interface responsiva</li>
+                    <li>✅ 100% em português</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #333; font-size: 14px; margin-bottom: 10px;">🎨 Paleta de Cores</h3>
+                <div class="color-palette">
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #FFF9E6;"></div>
+                        <span>Creme</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #FF8C42;"></div>
+                        <span>Laranja</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #FFD700;"></div>
+                        <span>Ouro</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #FF6B6B;"></div>
+                        <span>Vermelho</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #95E1D3;"></div>
+                        <span>Verde</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: #333;"></div>
+                        <span>Texto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="color: #333; font-size: 14px; margin-bottom: 10px;">📋 Categorias</h3>
+                <ul>
+                    <li>🍞 Pão</li>
+                    <li>🥐 Pastel</li>
+                    <li>🍪 Biscoito</li>
+                    <li>🎂 Bolo</li>
+                    <li>🍩 Rosquinha</li>
+                    <li>🥖 Outro</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,19 +3,31 @@
     "name": "Calculadora de Pão",
     "slug": "BreadCalculator",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFF9E6"
     },
     "assetBundlePatterns": ["**/*"],
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFF9E6"
       },
-      "package": "com.breadcalculator.app"
+      "package": "com.breadcalculator.app",
+      "versionCode": 1,
+      "buildNumber": "1"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.breadcalculator.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

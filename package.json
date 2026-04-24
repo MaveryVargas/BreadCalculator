@@ -1,5 +1,5 @@
 {
-  "name": "BreadCalculator",
+  "name": "breadcalculator",
   "version": "1.0.0",
   "description": "Calculadora de Pão Alegre - App para Gerenciar Padaria",
   "main": "index.js",
@@ -7,15 +7,25 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:android": "eas build --platform android --profile preview",
+    "build:android:local": "eas build --platform android --local",
+    "build:android:release": "eas build --platform android --profile production",
+    "prebuild": "expo prebuild --clean",
+    "eject": "expo prebuild",
+    "lint": "eslint .",
+    "test": "jest"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-native": "^0.73.0",
     "expo": "^50.0.0",
-    "expo-status-bar": "^1.7.1"
+    "expo-status-bar": "^1.7.1",
+    "@react-native-community/async-storage": "^1.12.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.0"
+    "@babel/core": "^7.23.0",
+    "babel-jest": "^29.0.0",
+    "jest": "^29.0.0"
   }
 }
