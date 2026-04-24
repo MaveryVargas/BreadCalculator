@@ -1,4 +1,4 @@
-# 🍞 Calculadora de Pão Alegre
+# 🍞 Bread Calculator
 
 Um aplicativo Android alegre e colorido para gerenciar seu inventário de padaria!
 
